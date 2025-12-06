@@ -1,0 +1,69 @@
+[gd_scene load_steps=9 format=3 uid="uid://dw8t1dv3lfppe"]
+
+[ext_resource type="Script" uid="uid://bj4adt1p0k305" path="res://scripts/hud.gd" id="1_ahhtf"]
+[ext_resource type="FontFile" uid="uid://dhop5y8wt4a0k" path="res://assets/fonts/m3x6.ttf" id="2_oo0fn"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oo0fn"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5ysmq"]
+bg_color = Color(1, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_oo0fn"]
+font_size = 60
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6fi6k"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uo2fv"]
+bg_color = Color(0, 1, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_5ysmq"]
+font_size = 45
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_ahhtf")
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+offset_left = 2.0
+offset_top = 1.0
+offset_right = 390.0
+offset_bottom = 45.0
+theme_override_styles/background = SubResource("StyleBoxFlat_oo0fn")
+theme_override_styles/fill = SubResource("StyleBoxFlat_5ysmq")
+show_percentage = false
+
+[node name="LabelVida" type="Label" parent="HealthBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("2_oo0fn")
+text = "VIDA"
+label_settings = SubResource("LabelSettings_oo0fn")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ExpBar" type="ProgressBar" parent="."]
+offset_left = 1.0
+offset_top = 620.0
+offset_right = 1154.0
+offset_bottom = 647.0
+theme_override_styles/background = SubResource("StyleBoxFlat_6fi6k")
+theme_override_styles/fill = SubResource("StyleBoxFlat_uo2fv")
+show_percentage = false
+
+[node name="LabelNivel" type="Label" parent="ExpBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("2_oo0fn")
+text = "NIVEL:1"
+label_settings = SubResource("LabelSettings_5ysmq")
+horizontal_alignment = 1
+vertical_alignment = 1

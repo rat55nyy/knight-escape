@@ -1,5 +1,9 @@
 extends CharacterBody2D
 
+signal health_changed(current_hp)
+signal experience_changed(current_xp, max_xp)
+signal level_changed(new_level)
+
 @export var speed = 150.0 
 @export var magic_slash_scene: PackedScene 
 
@@ -13,7 +17,6 @@ var experience = 0
 var experience_required = 100 
 var level = 1
 
-
 var is_dead = false  
 
 func _ready():
@@ -23,6 +26,11 @@ func _ready():
 		attack_timer.start()
 	else:
 		print("ERROR: Falta el nodo 'AttackTimer'")
+	
+
+	health_changed.emit(hp)
+	experience_changed.emit(experience, experience_required)
+	level_changed.emit(level)
 
 func _physics_process(_delta):
 	if is_dead:
@@ -34,7 +42,6 @@ func _physics_process(_delta):
 		velocity = direction * speed
 		anim.play("run")
 		
-
 		if direction.x < 0:
 			anim.flip_h = true
 		elif direction.x > 0:
@@ -58,12 +65,14 @@ func shoot():
 	attack.global_position = global_position
 	get_parent().add_child(attack)
 
-
 func take_damage(amount):
 	if is_dead: return
 
 	hp -= amount
 	print("Auch! Vida restante: ", hp)
+	
+
+	health_changed.emit(hp) 
 	
 	modulate = Color(1, 0, 0)
 	var tween = create_tween()
@@ -77,20 +86,20 @@ func die():
 	velocity = Vector2.ZERO   
 	
 	print("Iniciando animación de muerte...")
-	anim.play("death")      
+	anim.play("death")       
 	
-
 	await anim.animation_finished
 	
 	print("GAME OVER")
 	get_tree().paused = true
-
 
 func gain_experience(amount):
 	if is_dead: return
 
 	experience += amount
 	print("XP ganada: ", amount, " | Total: ", experience, "/", experience_required)
+	
+	experience_changed.emit(experience, experience_required)
 	
 	if experience >= experience_required:
 		level_up()
@@ -101,6 +110,12 @@ func level_up():
 	experience_required += 50 
 	
 	print("¡SUBIDA DE NIVEL! Nivel actual: ", level)
+	
+
+	level_changed.emit(level)
+	
+
+	experience_changed.emit(experience, experience_required)
 	
 	if attack_timer.wait_time > 0.5:
 		attack_timer.wait_time -= 0.1
